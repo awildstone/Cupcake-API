@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Cupcakes!!!!{% endblock %}
+
+{% block content %}
+<h1 class="display-2 text-center">Cupcakes</h1>
+<div class="text-center"><img src="https://cdn.pixabay.com/photo/2016/10/27/14/22/muffin-1775237__480.png" width="300"></div>
+
+<div class="m-3 text-center">
+<h2 class="display-5">All Cupcakes</h2>
+    <ul class="list-group" id="cupcakes-list">
+    </ul>
+    <button class="btn btn-primary btn-lg" id="show-cupcakes">Show Cupcakes</button>
+</div>
+
+<div class="m-3">
+    <h2 class="display-5">Add Cupcake</h2>
+    <form id="add-cupcake" action="/api/cupcakes" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.flavor.label(class_="form-lable") }}
+            {{ form.flavor }}
+            {% for error in form.flavor.errors %}
+            <small class="form-text text-danger">
+                {{ error }}
+            </small>
+        {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.size.label(class_="form-lable") }}
+            {{ form.size }}
+            {% for error in form.size.errors %}
+            <small class="form-text text-danger">
+                {{ error }}
+            </small>
+        {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.rating.label(class_="form-lable") }}
+            {{ form.rating }}
+            {% for error in form.rating.errors %}
+            <small class="form-text text-danger">
+                {{ error }}
+            </small>
+        {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.image.label(class_="form-lable") }}
+            {{ form.image(class_="form-control") }}
+            {% for error in form.image.errors %}
+            <small class="form-text text-danger">
+                {{ error }}
+            </small>
+        {% endfor %}
+        </div>
+        <button class="btn btn-success btn-lg">Add</button>
+    </form>
+</div>
+
+{% endblock %}
