@@ -3,6 +3,7 @@
 from flask import Flask, request, jsonify, render_template, redirect
 from models import db, connect_db, Cupcake
 from forms import AddCupcake
+import wtforms_json
 
 app = Flask(__name__)
 
@@ -10,6 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///cupcakes'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = "ZF2!Vt06BYQYgxKDU2of6O7hK"
+wtforms_json.init()
 
 connect_db(app)
 
@@ -43,31 +45,31 @@ def get_cupcake(cupcake_id):
 def create_cupcake():
     """ Create and return a new Cupcake. """
     
-    # form = AddCupcake()
+    form = AddCupcake.from_json(request.json)
 
-    # if form.validate_on_submit():
-    #     new_cupcake = Cupcake(
-    #         flavor=form.flavor.data,
-    #         size=form.size.data,
-    #         rating=form.rating.data,
-    #         image=form.image.data or None
-    #     )
+    if form.validate_on_submit():
+        new_cupcake = Cupcake(
+            flavor=form.flavor.data,
+            size=form.size.data,
+            rating=form.rating.data,
+            image=form.image.data or None
+        )
 
-    #     db.session.add(new_cupcake)
-    #     db.session.commit()
-    #     return redirect("/")
+        db.session.add(new_cupcake)
+        db.session.commit()
+        return redirect("/")
 
-    # else:
-    new_cupcake = Cupcake(
-        flavor=request.json["flavor"],
-        size=request.json["size"],
-        rating=request.json["rating"],
-        image=request.json.get("image", None))
+    else:
+        new_cupcake = Cupcake(
+            flavor=request.json["flavor"],
+            size=request.json["size"],
+            rating=request.json["rating"],
+            image=request.json.get("image", None))
 
-    db.session.add(new_cupcake)
-    db.session.commit()
+        db.session.add(new_cupcake)
+        db.session.commit()
 
-    return (jsonify(cupcake=new_cupcake.serialize()), 201)
+        return (jsonify(cupcake=new_cupcake.serialize()), 201)
 
 @app.route("/api/cupcakes/<int:cupcake_id>", methods=["PATCH"])
 def update_cupcake(cupcake_id):

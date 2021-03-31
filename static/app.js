@@ -12,7 +12,7 @@ $cupcakesList.on('click', '#delete', deleteCupcake);
 async function showAllCupcakes() {
 
     //get cupcakes from API
-    const cupcakes = await axios.get(`${BASE_URL}/api/cupcakes`);
+    const cupcakes = await axios.get(`${BASE_URL}api/cupcakes`);
    
     // Append each cupcake to the DOM
     const cupArr = cupcakes.data.cupcakes;
@@ -48,7 +48,7 @@ async function addCupcake(evt) {
     let image = $('#image').val();
 
     // Send new cupcake post request to server
-    const newCupCakeRes = await axios.post(`${BASE_URL}/api/cupcakes`, {flavor, size, rating, image});
+    const newCupCakeRes = await axios.post(`${BASE_URL}api/cupcakes`, {flavor, size, rating, image});
 
     // Create new Cupcake from server response & append the Cupcake to the DOM list
     let $newCupcake = $(buildCupcake(newCupCakeRes.data.cupcake));
