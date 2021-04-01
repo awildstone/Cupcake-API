@@ -1,9 +1,8 @@
 """Flask app for Cupcakes"""
 
-from flask import Flask, request, jsonify, render_template, redirect
+from flask import Flask, request, jsonify, render_template, redirect, flash
 from models import db, connect_db, Cupcake
 from forms import AddCupcake
-import wtforms_json
 
 app = Flask(__name__)
 
@@ -11,7 +10,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///cupcakes'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = "ZF2!Vt06BYQYgxKDU2of6O7hK"
-wtforms_json.init()
 
 connect_db(app)
 
@@ -45,7 +43,7 @@ def get_cupcake(cupcake_id):
 def create_cupcake():
     """ Create and return a new Cupcake. """
     
-    form = AddCupcake.from_json(request.json)
+    form = AddCupcake()
 
     if form.validate_on_submit():
         new_cupcake = Cupcake(
@@ -57,7 +55,12 @@ def create_cupcake():
 
         db.session.add(new_cupcake)
         db.session.commit()
+
+        flash(f"Cupcake {new_cupcake.id} added.")
         return redirect("/")
+
+    elif request.content_type != 'application/json':
+        return render_template("index.html", form=form)
 
     else:
         new_cupcake = Cupcake(
@@ -91,6 +94,8 @@ def delete_cupcake(cupcake_id):
     cupcake = Cupcake.query.get_or_404(cupcake_id)
     db.session.delete(cupcake)
     db.session.commit()
+
+    flash(f"Cupcake {cupcake.id} deleted.")
 
     return jsonify(message="deleted")
 

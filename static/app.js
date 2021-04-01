@@ -4,7 +4,7 @@ const $cupcakesList = $('#cupcakes-list');
 const BASE_URL = 'http://127.0.0.1:5000/';
 
 $showCupcakesBtn.click(showAllCupcakes);
-$addCupcakesForm.submit(addCupcake);
+// $addCupcakesForm.submit(addCupcake);
 $cupcakesList.on('click', '#delete', deleteCupcake);
 
 /** handle form for getting cupcakes from server */
@@ -37,26 +37,26 @@ function buildCupcake(cupcake) {
 
 /** handle form for adding new cupcakes */
 
-async function addCupcake(evt) {
-    // Prevent default form behavior so we can send the form data via axios to server
-    evt.preventDefault();
+// async function addCupcake(evt) {
+//     // Prevent default form behavior so we can send the form data via axios to server
+//     evt.preventDefault();
 
-    // Get form values
-    let flavor = $('#flavor').val();
-    let size = $('#size').val();
-    let rating = $('#rating').val();
-    let image = $('#image').val();
+//     // Get form values
+//     let flavor = $('#flavor').val();
+//     let size = $('#size').val();
+//     let rating = $('#rating').val();
+//     let image = $('#image').val();
 
-    // Send new cupcake post request to server
-    const newCupCakeRes = await axios.post(`${BASE_URL}api/cupcakes`, {flavor, size, rating, image});
+//     // Send new cupcake post request to server
+//     const newCupCakeRes = await axios.post(`${BASE_URL}api/cupcakes`, {flavor, size, rating, image});
 
-    // Create new Cupcake from server response & append the Cupcake to the DOM list
-    let $newCupcake = $(buildCupcake(newCupCakeRes.data.cupcake));
-    $cupcakesList.append($newCupcake);
+//     // Create new Cupcake from server response & append the Cupcake to the DOM list
+//     let $newCupcake = $(buildCupcake(newCupCakeRes.data.cupcake));
+//     $cupcakesList.append($newCupcake);
 
-    //clear form data
-    $addCupcakesForm.trigger('reset');
-}
+//     //clear form data
+//     $addCupcakesForm.trigger('reset');
+// }
 
 /** handle form for deleting a cupcake */
 
@@ -72,4 +72,7 @@ async function deleteCupcake(evt) {
 
     //remove the cupcake from the DOM
     $cupcake.remove();
+
+    //reload window to display confirmation message
+    location.reload();
 }

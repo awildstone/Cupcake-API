@@ -12,5 +12,5 @@ class AddCupcake(FlaskForm):
 
     flavor = SelectField("Flavor", choices=[(flavor, flavor) for flavor in FLAVORS], validators=[InputRequired(message="You must select the flavor of the Cupcake.")])
     size = SelectField("Size", choices=[*SIZES], validators=[InputRequired(message="You must enter the size of the Cupcake.")])
-    rating = FloatField("Rating", validators=[NumberRange(min=1.0, max=10.0, message="You must enter an rating between 1-10"), InputRequired(message="You must enter your rating of the Cupcake.")])
+    rating = FloatField("Rating", validators=[NumberRange(min=1, max=10, message="You must enter an rating between 1-10"), InputRequired(message="You must enter your rating for the Cupcake.")])
     image = StringField("Image URL", validators=[URL(message="You must enter a valid URL"), Optional()]) 
