@@ -45,6 +45,18 @@ def create_cupcake():
     
     form = AddCupcake()
 
+    if request.is_json:
+        new_cupcake = Cupcake(
+            flavor=request.json["flavor"],
+            size=request.json["size"],
+            rating=request.json["rating"],
+            image=request.json.get("image", None))
+
+        db.session.add(new_cupcake)
+        db.session.commit()
+
+        return (jsonify(cupcake=new_cupcake.serialize()), 201)
+    
     if form.validate_on_submit():
         new_cupcake = Cupcake(
             flavor=form.flavor.data,
@@ -58,21 +70,8 @@ def create_cupcake():
 
         flash(f"Cupcake {new_cupcake.id} added.")
         return redirect("/")
-
-    elif request.content_type != 'application/json':
-        return render_template("index.html", form=form)
-
-    else:
-        new_cupcake = Cupcake(
-            flavor=request.json["flavor"],
-            size=request.json["size"],
-            rating=request.json["rating"],
-            image=request.json.get("image", None))
-
-        db.session.add(new_cupcake)
-        db.session.commit()
-
-        return (jsonify(cupcake=new_cupcake.serialize()), 201)
+    
+    return render_template("index.html", form=form)
 
 @app.route("/api/cupcakes/<int:cupcake_id>", methods=["PATCH"])
 def update_cupcake(cupcake_id):
